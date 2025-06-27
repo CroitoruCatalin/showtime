@@ -95,13 +95,13 @@ class Festival
      */
     public function getBand(): Collection
     {
-        return $this->Band;
+        return $this->bands;
     }
 
     public function addBand(Band $band): static
     {
-        if (!$this->Band->contains($band)) {
-            $this->Band->add($band);
+        if (!$this->bands->contains($band)) {
+            $this->bands->add($band);
         }
 
         return $this;
@@ -109,7 +109,7 @@ class Festival
 
     public function removeBand(Band $band): static
     {
-        $this->Band->removeElement($band);
+        $this->bands->removeElement($band);
 
         return $this;
     }
