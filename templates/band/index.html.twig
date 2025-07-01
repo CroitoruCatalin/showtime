@@ -1,24 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BandController!{% endblock %}
+{% block title %}Band index{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+    <h1>Band index</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/enyone5/PhpstormProjects/showtime/src/Controller/BandController.php</code></li>
-        <li>Your template at <code>C:/Users/enyone5/PhpstormProjects/showtime/templates/band/index.html.twig</code></li>
-    </ul>
-
-    {% for band in bands %}
-        <li>{{ band.name }}</li>
-    {% endfor %}
-</div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for band in bands %}
+            <tr>
+                <td>{{ band.id }}</td>
+                <td>{{ band.name }}</td>
+                <td>{{ band.genre.value }}</td>
+                <td>
+                    <a href="{{ path('app_band_show', {'id': band.id}) }}" class="btn btn-primary">show</a>
+                    <a href="{{ path('app_band_edit', {'id': band.id}) }}" class="btn btn-secondary">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {#
+    <calendar-date class="cally bg-base-100 border border-base-300 shadow-lg rounded-box">
+        <svg aria-label="Previous" class="fill-current size-4" slot="previous" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24">
+            <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+        </svg>
+        <svg aria-label="Next" class="fill-current size-4" slot="next" xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 24 24">
+            <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+        </svg>
+        <calendar-month></calendar-month>
+    </calendar-date>
+    #}
+    <a href="{{ path('app_band_new') }}" class="btn">Create new</a>
 {% endblock %}

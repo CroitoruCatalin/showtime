@@ -8,6 +8,7 @@
 /public/bundles/
 /var/
 /vendor/
+/node_modules/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
@@ -21,3 +22,9 @@
 ###< symfony/asset-mapper ###
 /.env.dev
 /.env.test
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+/config/packages/symfonycasts_tailwind.yaml
