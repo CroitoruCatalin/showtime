@@ -2,12 +2,16 @@
 
 {% block title %}Edit Band{% endblock %}
 
-{% block body %}
+{% block content %}
     <h1>Edit Band</h1>
 
-    {{ include('band/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('band/_form.html.twig', {
+        'button_label': 'Update',
+        'band': band,
+        'form_title': 'Edit band'
+    }) }}
 
     <a href="{{ path('app_band_index') }}">back to list</a>
-
-    {{ include('band/_delete_form.html.twig') }}
+    {#    the following is no longer used: #}
+    {#    {{ include('band/_delete_form.html.twig', {'band':band}) }} #}
 {% endblock %}

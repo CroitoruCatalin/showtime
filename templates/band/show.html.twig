@@ -2,8 +2,24 @@
 
 {% block title %}Band{% endblock %}
 
-{% block body %}
-    <h1>Band</h1>
+{% block content %}
+
+    <div class="relative w-full h-64 overflow-hidden rounded-sm shadow-lg">
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
+            alt="Band Cover"
+            class="object-cover w-full h-full"
+        />
+        <div
+            class="absolute bottom-2 left-4 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
+            <span>
+                {{ band.name }}
+            </span>
+            <span class="badge badge-soft badge-info">
+                {{ band.genre.value }}
+            </span>
+        </div>
+    </div>
 
     <table class="table">
         <tbody>
@@ -26,5 +42,7 @@
 
     <a href="{{ path('app_band_edit', {'id': band.id}) }}">edit</a>
 
-    {{ include('band/_delete_form.html.twig') }}
+    <div class="w-[100px]">
+        {{ include('band/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

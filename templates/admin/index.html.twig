@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin dashboard{% endblock %}
+
+{% block content %}
+    <div class="stats stats-vertical lg:stats-horizontal shadow mb-10">
+        <div class="stat">
+            <div class="stat-title">Downloads</div>
+            <div class="stat-value">31K</div>
+            <div class="stat-desc">Jan 1st - Feb 1st</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">New Users</div>
+            <div class="stat-value">4,200</div>
+            <div class="stat-desc">↗︎ 400 (22%)</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-title">New Registers</div>
+            <div class="stat-value">1,200</div>
+            <div class="stat-desc">↘︎ 90 (14%)</div>
+        </div>
+    </div>
+
+
+    <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 2xl:grid-cols-4 bg-primary justify-items-center">
+        <div class="bg-error">
+            <div class="card bg-base-100 w-90 shadow-sm">
+                <figure class="px-10 pt-10">
+                    <img
+                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        alt="Shoes"
+                        class="rounded-xl"/>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title">Card Title</h2>
+                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary">Manage festivals</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-error">
+            <div class="card bg-base-100 w-90 shadow-sm">
+                <figure class="px-10 pt-10">
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
+                        alt="Band"
+                        class="rounded-xl"/>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title">Bands</h2>
+                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                    <div class="card-actions">
+                        <a href="{{ path('app_band_index') }}" class="btn btn-primary">Manage bands</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-error">
+            <div class="card bg-base-100 w-90 shadow-sm">
+                <figure class="px-10 pt-10">
+                    <img
+                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        alt="Shoes"
+                        class="rounded-xl"/>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title">Card Title</h2>
+                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary">Manage whatever 1</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-error">
+            <div class="card bg-base-100 w-90 shadow-sm">
+                <figure class="px-10 pt-10">
+                    <img
+                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        alt="Shoes"
+                        class="rounded-xl"/>
+                </figure>
+                <div class="card-body items-center text-center">
+                    <h2 class="card-title">Card Title</h2>
+                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                    <div class="card-actions">
+                        <button class="btn btn-primary">Manage wathever 2</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
