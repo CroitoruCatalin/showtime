@@ -35,10 +35,14 @@ class BookingController extends AbstractController
             return $this->redirectToRoute('booking_index', [], Response::HTTP_SEE_OTHER);
         }
 
+//        the current version of symfony returns a success code on forms that are submitted but invalid
+//        which leads turbo to expect some kind of redirect, which means it won't render errors in the frontend
+        $status = ($form->isSubmitted() && !$form->isValid()) ? 422 : 200;
+
         return $this->render('booking/new.html.twig', [
             'booking' => $booking,
             'form' => $form->createView(),
-        ]);
+        ], new Response(null, $status));
     }
 
     #[Route('/{id}', name: 'booking_show', methods: ['GET'])]

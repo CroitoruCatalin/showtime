@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 class Booking
@@ -15,18 +16,23 @@ class Booking
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'A festival must be selected.')]
     private ?Festival $festival = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Email is required.')]
+    #[Assert\Email(message: 'This is not a valid email address.')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: 'Your name must have a length of at least {{ limit }} characters.',
+        maxMessage: 'Your name cannot exceed {{ limit }} characters.',
+    )]
+    #[Assert\NotBlank(message: 'Full name is required.')]
     private ?string $full_name = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getFestival(): ?Festival
     {
@@ -62,5 +68,10 @@ class Booking
         $this->full_name = $full_name;
 
         return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }
