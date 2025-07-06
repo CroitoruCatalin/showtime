@@ -22,7 +22,6 @@ class Festival
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 3, max: 255)]
-    #[Assert\NoSuspiciousCharacters]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

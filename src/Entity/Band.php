@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BandRepository::class)]
-class
-Band
+class Band
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,7 +19,6 @@ Band
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(min: 1, max: 255)]
-    #[Assert\NoSuspiciousCharacters]
     private ?string $name = null;
 
     #[ORM\Column(enumType: MusicGenre::class)]
