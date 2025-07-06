@@ -1,0 +1,40 @@
+{{ form_start(form, { attr: { class: 'w-xs mx-auto' } }) }}
+<fieldset class="fieldset bg-base-200 border-base-300 rounded-box p-4">
+    <legend class="fieldset-legend">{{ form_title|default('Booking details') }}</legend>
+
+    {# Name field #}
+    <label class="label" for="{{ form.full_name.vars.id }}">
+        {{ form_label(form.full_name, 'Name') }}
+    </label>
+    {{ form_widget(form.full_name, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Booking name' }
+    }) }}
+    {{ form_errors(form.full_name) }}
+
+    {# Email field #}
+    <label class="label" for="{{ form.email.vars.id }}">
+        {{ form_label(form.email, 'Email') }}
+    </label>
+    {{ form_widget(form.email, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Booking email' }
+    }) }}
+    {{ form_errors(form.email) }}
+
+    {# Festival field #}
+    <label class="label" for="{{ form.festival.vars.id }}">
+        {{ form_label(form.festival, 'Festival') }}
+    </label>
+    {{ form_widget(form.festival, {
+        attr: { class: 'select select-bordered w-full' }
+    }) }}
+    {{ form_errors(form.festival) }}
+
+
+    <button type="submit" class="btn btn-primary mt-4 w-full">
+        {{ button_label|default('Save') }}
+    </button>
+    {{ form_end(form) }}
+    {% if booking is defined and booking.id %}
+        {{ include('booking/_delete_form.html.twig', { 'booking': booking }) }}
+    {% endif %}
+</fieldset>

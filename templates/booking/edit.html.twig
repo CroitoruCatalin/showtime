@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Edit booking{% endblock %}
+
+{% block content %}
+    <h1>Edit booking</h1>
+
+    {{ include('booking/_form.html.twig', {
+        'button_label': 'Update',
+        'booking': booking,
+        'form_title': 'Edit booking'
+    }) }}
+
+    <a href="{{ path('booking_index') }}">back to list</a>
+{% endblock %}
