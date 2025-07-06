@@ -1,0 +1,131 @@
+{% extends 'layouts/admin-base.html.twig' %}
+
+{% block title %}Festival{% endblock %}
+
+{% block content %}
+    {% for message in app.flashes('success') %}
+        <div role="alert" class="alert alert-success mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>
+                {{ message }}
+            </span>
+        </div>
+    {% endfor %}
+    <div class="relative w-full h-64 overflow-hidden rounded-sm shadow-lg">
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
+            alt="Band Cover"
+            class="object-cover w-full h-full"
+        />
+        <div
+            class="absolute top-2 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
+            <span></span>
+            <span class="badge badge-soft badge-info">
+                {{ festival.startDate|date('Y.m.d') }} - {{ festival.endDate|date('Y.m.d') }}
+            </span>
+        </div>
+        <div
+            class="absolute bottom-2 left-4 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
+            <span>
+                {{ festival.name }}
+            </span>
+            <span class="badge badge-soft badge-info">
+                {{ festival.location }}
+            </span>
+        </div>
+    </div>
+
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th colspan="3">
+                    <h1 class="text-xl">Participating bands</h1>
+
+                </th>
+                <th>
+                    <a href="{{ path('admin_festival_add_band', {'id': festival.id}) }}" class="btn btn-primary">
+                        Add another band
+                    </a>
+                </th>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Genre</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for band in festival.band %}
+                <tr class="">
+                    <td>{{ band.id }}</td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar">
+                                <div class="mask mask-squircle h-12 w-12">
+                                    <img
+                                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                                        alt="Avatar Tailwind CSS Component"/>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="font-bold"> {{ band.name }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="badge badge-soft badge-info">
+                            {{ band.genre.value }}
+                        </div>
+                    </td>
+                    <td class="join join-vertical lg:join-horizontal">
+                        <a href="{{ path('admin_band_show', {'id': band.id}) }}"
+                           class="btn btn-soft btn-primary join-item">details</a>
+                        <form
+                            action="{{ path('admin_festival_remove_band', {'festival_id': festival.id, 'band_id': band.id}) }}"
+                            method="post">
+                            <input type="submit" value="remove from festival"
+                                   class="btn btn-soft btn-warning join-item">
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ festival.id }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ festival.name }}</td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>{{ festival.location }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin_festival_index') }}">back to list</a>
+
+    <a href="{{ path('admin_festival_edit', {'id': festival.id}) }}">edit</a>
+
+    <div class="w-[100px]">
+        {{ include('festival/_delete_form.html.twig') }}
+    </div>
+
+{% endblock %}

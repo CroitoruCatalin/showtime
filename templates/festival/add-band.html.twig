@@ -1,0 +1,15 @@
+{% extends 'layouts/admin-base.html.twig' %}
+
+{% block title %}Add a band to your festival{% endblock %}
+{% block content %}
+    <h1>Add a band to {{ festival.name }}</h1>
+
+    <fieldset class="fieldset p-4">
+        <legend class="fieldset-legend">Add a band to {{ festival.name }}</legend>
+        {{ form_start(form, { attr: { class: 'space-y-4 w-full max-w-md'} }) }}
+        {{ form_row(form.band) }}
+        <button class="btn btn-primary" type="submit">Add Band</button>
+        {{ form_errors(form.band) }}
+        {{ form_end(form) }}
+    </fieldset>
+{% endblock %}

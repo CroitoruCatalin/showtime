@@ -1,0 +1,58 @@
+{{ form_start(form, { attr: { class: 'w-xs mx-auto' } }) }}
+<fieldset class="fieldset bg-base-200 border-base-300 rounded-box p-4">
+    <legend class="fieldset-legend">{{ form_title|default('Festival details') }}</legend>
+
+    {# Name field #}
+    <label class="label" for="{{ form.name.vars.id }}">
+        {{ form_label(form.name, 'Name') }}
+    </label>
+    {{ form_widget(form.name, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Festival Name' }
+    }) }}
+    {{ form_errors(form.name) }}
+
+    {# Location field #}
+    <label class="label" for="{{ form.location.vars.id }}">
+        {{ form_label(form.location, 'Location') }}
+    </label>
+    {{ form_widget(form.location, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Festival Location' }
+    }) }}
+    {{ form_errors(form.location) }}
+
+    {# Start date field #}
+    <label class="label" for="{{ form.location.vars.id }}">
+        {{ form_label(form.start_date, 'Start date') }}
+    </label>
+    {{ form_widget(form.start_date, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Festival start date' }
+    }) }}
+    {{ form_errors(form.start_date) }}
+
+    {# End date field #}
+    <label class="label" for="{{ form.location.vars.id }}">
+        {{ form_label(form.end_date, 'End date') }}
+    </label>
+    {{ form_widget(form.end_date, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Festival end date' }
+    }) }}
+    {{ form_errors(form.end_date) }}
+
+    {# End date field #}
+    <label class="label" for="{{ form.price.vars.id }}">
+        {{ form_label(form.price, 'Ticket price') }}
+    </label>
+    {{ form_widget(form.price, {
+        attr: { class: 'input input-bordered w-full', placeholder: 'Ticket price' }
+    }) }}
+    {{ form_errors(form.price) }}
+
+
+    <button type="submit" class="btn btn-primary mt-4 w-full">
+        {{ button_label|default('Save') }}
+    </button>
+    {{ form_end(form) }}
+    {% if festival is defined and festival.id %}
+        {{ include('festival/_delete_form.html.twig', { 'festival': festival }) }}
+    {% endif %}
+</fieldset>

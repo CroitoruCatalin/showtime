@@ -1,0 +1,17 @@
+{% extends 'layouts/admin-base.html.twig' %}
+
+{% block title %}Edit Festival{% endblock %}
+
+{% block content %}
+    <h1>Edit Band</h1>
+
+    {{ include('festival/_form.html.twig', {
+        'button_label': 'Update',
+        'festival': festival,
+        'form_title': 'Edit festival'
+    }) }}
+
+    <a href="{{ path('admin_festival_index') }}">back to list</a>
+    {#    the following is no longer used: #}
+    {#    {{ include('band/_delete_form.html.twig', {'band':band}) }} #}
+{% endblock %}
