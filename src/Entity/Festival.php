@@ -7,8 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: FestivalRepository::class)]
+#[Callback('validateDates')]
 class Festival
 {
     #[ORM\Id]
@@ -17,12 +21,16 @@ class Festival
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3, max: 255)]
+    #[Assert\NoSuspiciousCharacters]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTime $end_date = null;
 
     /**
@@ -32,7 +40,7 @@ class Festival
     private Collection $bands;
 
     #[ORM\Column(length: 255)]
-    private ?string $Location = null;
+    private ?string $location = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
     private ?string $price = null;
@@ -47,6 +55,15 @@ class Festival
     {
         $this->bands = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+    }
+
+    public function validateDates(ExecutionContextInterface $context): void
+    {
+        if ($this->start_date && $this->end_date && $this->start_date > $this->end_date) {
+            $context->buildViolation('Start date must be before end date.')
+                ->atPath('start_date')
+                ->addViolation();
+        }
     }
 
     public function getId(): ?int
@@ -116,12 +133,12 @@ class Festival
 
     public function getLocation(): ?string
     {
-        return $this->Location;
+        return $this->location;
     }
 
-    public function setLocation(string $Location): static
+    public function setLocation(string $location): static
     {
-        $this->Location = $Location;
+        $this->location = $location;
 
         return $this;
     }
