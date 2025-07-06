@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/admin-base.html.twig' %}
 
 {% block title %}Band{% endblock %}
 
@@ -38,9 +38,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_band_index') }}">back to list</a>
+    <a href="{{ path('admin_band_index') }}">back to list</a>
 
-    <a href="{{ path('app_band_edit', {'id': band.id}) }}">edit</a>
+    <a href="{{ path('admin_band_edit', {'id': band.id}) }}">edit</a>
 
     <div class="w-[100px]">
         {{ include('band/_delete_form.html.twig') }}

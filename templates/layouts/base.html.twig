@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="forest">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
@@ -12,16 +12,16 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body>
+<body data-theme="light">
 {% block body %}
     <div class="min-h-screen grid grid-cols-1 md:grid-cols-[250px_1fr]">
         <!-- Sidebar -->
         <aside class="bg-base-200 p-4 hidden md:block">
             <h2 class="text-xl font-bold mb-4">Admin</h2>
             <ul class="menu">
-                <li><a href="{{ path('app_admin_index') }}">Admin dashboard</a></li>
-                <li><a href="{{ path('app_band_index') }}">Bands</a></li>
-                <li><a href="#">Festivals</a></li>
+                <li><a href="{{ path('admin_index') }}">Admin dashboard</a></li>
+                <li><a href="{{ path('admin_festival_index') }}">Festivals</a></li>
+                <li><a href="{{ path('admin_band_index') }}">Bands</a></li>
             </ul>
         </aside>
 

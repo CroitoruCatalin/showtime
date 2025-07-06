@@ -1,54 +1,62 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/admin-base.html.twig' %}
 
 {% block title %}Band index{% endblock %}
 
 {% block content %}
-    <div class="flex justify-between pr-[10%] md:pr-[15%] lg:pr-[22%]">
-        <h1 class="text-xl">Band index</h1>
-        <a href="{{ path('app_band_new') }}" class="btn btn-primary">Create new</a>
-    </div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Genre</th>
-            <th>actions</th>
-        </tr>
-        </thead>
-        <tbody class="">
-        {% for band in bands %}
-            <tr class="">
-                <td>{{ band.id }}</td>
-                <td>
-                    <div class="flex items-center gap-3">
-                        <div class="avatar">
-                            <div class="mask mask-squircle h-12 w-12">
-                                <img
-                                    src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                    alt="Avatar Tailwind CSS Component"/>
+    <div class="overflow-auto max-h-[600px]">
+        <table class="table table-xs table-pin-rows table-pin-cols">
+            <thead>
+            <tr class="sticky top-0">
+                <th colspan="3">
+                    <h1 class="text-xl">Bands</h1>
+                </th>
+                <th>
+                    <a href="{{ path('admin_band_new') }}" class="btn btn-primary">Create new</a>
+                </th>
+            </tr>
+            <tr class="sticky top-[3rem]">
+                <th>Id</th>
+                <th>Name</th>
+                <th>Genre</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for band in bands %}
+                <tr class="">
+                    <td>{{ band.id }}</td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar">
+                                <div class="mask mask-squircle h-12 w-12">
+                                    <img
+                                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                                        alt="Avatar Tailwind CSS Component"/>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="font-bold text-sm"> {{ band.name }}</div>
                             </div>
                         </div>
-                        <div>
-                            <div class="font-bold"> {{ band.name }}</div>
+                    </td>
+                    <td>
+                        <div class="badge badge-soft badge-info">
+                            {{ band.genre.value }}
                         </div>
-                    </div>
-                </td>
-                <td>
-                    <div class="badge badge-soft badge-info">
-                        {{ band.genre.value }}
-                    </div>
-                </td>
-                <td class="join join-vertical lg:join-horizontal">
-                    <a href="{{ path('app_band_show', {'id': band.id}) }}" class="btn btn-soft btn-primary join-item">show</a>
-                    <a href="{{ path('app_band_edit', {'id': band.id}) }}" class="btn btn-soft btn-warning join-item">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    </td>
+                    <td class="join join-vertical lg:join-horizontal">
+                        <a href="{{ path('admin_band_show', {'id': band.id}) }}"
+                           class="btn btn-soft btn-primary join-item">show</a>
+                        <a href="{{ path('admin_band_edit', {'id': band.id}) }}"
+                           class="btn btn-soft btn-warning join-item">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
