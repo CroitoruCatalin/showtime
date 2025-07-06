@@ -12,7 +12,7 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body data-theme="light">
+<body data-theme="forest">
 {% block body %}
     <div class="min-h-screen grid grid-cols-1 md:grid-cols-[250px_1fr]">
         <!-- Sidebar -->
@@ -22,6 +22,7 @@
                 <li><a href="{{ path('admin_index') }}">Admin dashboard</a></li>
                 <li><a href="{{ path('admin_festival_index') }}">Festivals</a></li>
                 <li><a href="{{ path('admin_band_index') }}">Bands</a></li>
+                <li><a href="{{ path('app_home_index') }}">Home</a></li>
             </ul>
         </aside>
 

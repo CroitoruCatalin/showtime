@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/admin-base.html.twig' %}
 
 {% block title %}Admin dashboard{% endblock %}
 
@@ -24,48 +24,51 @@
     </div>
 
 
-    <div class="grid grid-cols-1 gap-2 lg:grid-cols-2 2xl:grid-cols-4 bg-primary justify-items-center">
-        <div class="bg-error">
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-4 justify-items-center">
+        <div class="">
             <div class="card bg-base-100 w-90 shadow-sm">
                 <figure class="px-10 pt-10">
                     <img
-                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                        alt="Shoes"
-                        class="rounded-xl"/>
+                        src="{{ asset('images/festival.jpg') }}"
+                        alt="Festival"
+                        class="rounded-xl h-[160px] w-[260px] object-fill"
+                    />
                 </figure>
                 <div class="card-body items-center text-center">
-                    <h2 class="card-title">Card Title</h2>
+                    <h2 class="card-title">Festivals</h2>
                     <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                     <div class="card-actions">
-                        <button class="btn btn-primary">Manage festivals</button>
+                        <button class="btn btn-primary">
+                            <a href="{{ path('admin_festival_index') }}" class="btn btn-primary">Manage festivals</a>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="bg-error">
+        <div class="">
             <div class="card bg-base-100 w-90 shadow-sm">
                 <figure class="px-10 pt-10">
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
                         alt="Band"
-                        class="rounded-xl"/>
+                        class="rounded-xl h-[160px] w-[260px] object-fill"/>
                 </figure>
                 <div class="card-body items-center text-center">
                     <h2 class="card-title">Bands</h2>
                     <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                     <div class="card-actions">
-                        <a href="{{ path('app_band_index') }}" class="btn btn-primary">Manage bands</a>
+                        <a href="{{ path('admin_band_index') }}" class="btn btn-primary">Manage bands</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="bg-error">
+        <div class="">
             <div class="card bg-base-100 w-90 shadow-sm">
                 <figure class="px-10 pt-10">
                     <img
                         src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                         alt="Shoes"
-                        class="rounded-xl"/>
+                        class="rounded-xl h-[160px] w-[260px] object-fill"/>
                 </figure>
                 <div class="card-body items-center text-center">
                     <h2 class="card-title">Card Title</h2>
@@ -76,13 +79,13 @@
                 </div>
             </div>
         </div>
-        <div class="bg-error">
+        <div class="">
             <div class="card bg-base-100 w-90 shadow-sm">
                 <figure class="px-10 pt-10">
                     <img
                         src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                         alt="Shoes"
-                        class="rounded-xl"/>
+                        class="rounded-xl h-[160px] w-[260px] object-fill"/>
                 </figure>
                 <div class="card-body items-center text-center">
                     <h2 class="card-title">Card Title</h2>
