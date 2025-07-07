@@ -3,6 +3,36 @@
 {% block title %}Band index{% endblock %}
 
 {% block content %}
+    <form id="filter-form" method="get" class="flex flex-wrap gap-2 mb-4 items-end">
+        <div>
+            <label for="name_starts" class="block text-sm font-semibold">Name</label>
+            <input
+                type="text"
+                id="name_starts"
+                name="name_starts"
+                value="{{ letters|default('') }}"
+                class="input input-sm w-48"
+            />
+        </div>
+        <div>
+            <label for="genre" class="block text-sm font-semibold">Genre</label>
+            <select id="genre" name="genre" class="select select-sm w-48">
+                <option value="">All genres</option>
+                {% for g in enum('App\\Enum\\MusicGenre').cases %}
+                    <option value="{{ g.value }}" {% if g.value == genre %}selected{% endif %}>
+                        {{ g.value }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mt-6">
+            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+            {% if letters or genre %}
+                <a href="{{ path('admin_band_index') }}" class="btn btn-sm btn-ghost ml-2">Reset</a>
+            {% endif %}
+        </div>
+    </form>
+
     <div class="overflow-auto max-h-[600px]">
         <table class="table table-xs table-pin-rows table-pin-cols">
             <thead>
@@ -15,34 +45,46 @@
                 </th>
             </tr>
             <tr class="sticky top-[3rem]">
-                <th>Id</th>
-                <th>Name</th>
-                <th>Genre</th>
-                <th>actions</th>
+                {% set toggled_dir = dir == 'ASC' ? 'DESC' : 'ASC' %}
+                <th>
+                    <a href="{{ path('admin_band_index',
+                        query|merge({'sort':'id','direction': sort=='id' ? toggled_dir : 'ASC'})) }}">
+                        Id {% if sort=='id' %}{{ dir=='ASC' ? '↑' : '↓' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('admin_band_index',
+                        query|merge({'sort':'name','direction': sort=='name' ? toggled_dir : 'ASC'})) }}">
+                        Name {% if sort=='name' %}{{ dir=='ASC' ? '↑' : '↓' }}{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ path('admin_band_index',
+                        query|merge({'sort':'genre','direction': sort=='genre' ? toggled_dir : 'ASC'})) }}">
+                        Genre {% if sort=='genre' %}{{ dir=='ASC' ? '↑' : '↓' }}{% endif %}
+                    </a>
+                </th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             {% for band in bands %}
-                <tr class="">
+                <tr>
                     <td>{{ band.id }}</td>
                     <td>
                         <div class="flex items-center gap-3">
                             <div class="avatar">
                                 <div class="mask mask-squircle h-12 w-12">
-                                    <img
-                                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                        alt="Avatar Tailwind CSS Component"/>
+                                    <img src="https://img.daisyui.com/images/profile/demo/2@94.webp" alt="Avatar"/>
                                 </div>
                             </div>
                             <div>
-                                <div class="font-bold text-sm"> {{ band.name }}</div>
+                                <div class="font-bold text-sm">{{ band.name }}</div>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <div class="badge badge-soft badge-info">
-                            {{ band.genre.value }}
-                        </div>
+                        <div class="badge badge-soft badge-info">{{ band.genre.value }}</div>
                     </td>
                     <td class="join join-vertical lg:join-horizontal">
                         <a href="{{ path('admin_band_show', {'id': band.id}) }}"

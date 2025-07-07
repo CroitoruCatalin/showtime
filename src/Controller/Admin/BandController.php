@@ -15,11 +15,40 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BandController extends AbstractController
 {
     #[Route(name: 'admin_band_index', methods: ['GET'])]
-    public function index(BandRepository $bandRepository): Response
+    public function index(Request $request, BandRepository $bandRepository): Response
     {
-        return $this->render('band/index.html.twig', [
-            'bands' => $bandRepository->findAll(),
-        ]);
+        $qb = $bandRepository->createQueryBuilder('b');
+        $letters = $request->query->get('name_starts', '');
+        $genre = $request->query->get('genre', '');
+        $sort = $request->query->get('sort', 'id');
+        $dir = strtoupper($request->query->get('direction', 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
+
+
+        if ($letters !== '') {
+            $qb->andWhere('b.name LIKE :name_starts')
+                ->setParameter('name_starts', $letters . '%');
+        }
+
+        if ($genre !== '') {
+            $qb->andWhere('b.genre = :genre')
+                ->setParameter('genre', $genre);
+        }
+
+        if (in_array($sort, ['id', 'name', 'genre'], true)) {
+            $qb->orderBy("b.$sort", $dir);
+        }
+
+        $bands = $qb->getQuery()->getResult();
+
+        return $this->render('band/index.html.twig',
+            [
+                'bands' => $bands,
+                'letters' => $letters,
+                'genre' => $genre,
+                'sort' => $sort,
+                'dir' => $dir,
+                'query' => $request->query->all(),
+            ]);
     }
 
     #[Route('/new', name: 'admin_band_new', methods: ['GET', 'POST'])]
