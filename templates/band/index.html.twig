@@ -101,4 +101,26 @@
             </tbody>
         </table>
     </div>
+
+    {% if pages > 1 %}
+        <div class="join mt-4 justify-center">
+            <a class="join-item btn {{ page == 1 ? 'btn-disabled' : '' }}"
+               href="{{ path('admin_band_index', query|merge({'page': page-1})) }}">
+                « Prev
+            </a>
+
+            {% for p in 1..pages %}
+                <a class="join-item btn {{ p == page ? 'btn-active' : '' }}"
+                   href="{{ path('admin_band_index', query|merge({'page': p})) }}">
+                    {{ p }}
+                </a>
+            {% endfor %}
+
+            <a class="join-item btn {{ page == pages ? 'btn-disabled' : '' }}"
+               href="{{ path('admin_band_index', query|merge({'page': page+1})) }}">
+                Next »
+            </a>
+        </div>
+    {% endif %}
+
 {% endblock %}

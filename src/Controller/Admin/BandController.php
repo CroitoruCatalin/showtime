@@ -22,7 +22,9 @@ final class BandController extends AbstractController
         $genre = $request->query->get('genre', '');
         $sort = $request->query->get('sort', 'id');
         $dir = strtoupper($request->query->get('direction', 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
-
+        $page = max(1, $request->query->get('page', 1));
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
 
         if ($letters !== '') {
             $qb->andWhere('b.name LIKE :name_starts')
@@ -37,9 +39,10 @@ final class BandController extends AbstractController
         if (in_array($sort, ['id', 'name', 'genre'], true)) {
             $qb->orderBy("b.$sort", $dir);
         }
-
+        $totalItems = (clone $qb)->select('COUNT(b.id)')->getQuery()->getSingleScalarResult();
+        $qb->setFirstResult($offset)->setMaxResults($limit);
         $bands = $qb->getQuery()->getResult();
-
+        $pages = (int)ceil($totalItems / $limit);
         return $this->render('band/index.html.twig',
             [
                 'bands' => $bands,
@@ -48,6 +51,8 @@ final class BandController extends AbstractController
                 'sort' => $sort,
                 'dir' => $dir,
                 'query' => $request->query->all(),
+                'page' => $page,
+                'pages' => $pages,
             ]);
     }
 
