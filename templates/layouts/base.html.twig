@@ -12,18 +12,11 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body data-theme="light">
+<body data-theme="{% if app.user %}light{% else %}forest{% endif %}">
 {% block body %}
     <div class="min-h-screen grid grid-cols-1 md:grid-cols-[250px_1fr]">
         <!-- Sidebar -->
-        <aside class="bg-base-200 p-4 hidden md:block">
-            <h2 class="text-xl font-bold mb-4">Admin</h2>
-            <ul class="menu">
-                <li><a href="{{ path('admin_index') }}">Admin dashboard</a></li>
-                <li><a href="{{ path('admin_festival_index') }}">Festivals</a></li>
-                <li><a href="{{ path('admin_band_index') }}">Bands</a></li>
-            </ul>
-        </aside>
+        {% include 'layouts/_sidebar.html.twig' %}
 
         <!-- Content -->
         <div class="flex flex-col">

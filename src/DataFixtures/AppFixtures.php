@@ -5,12 +5,15 @@ namespace App\DataFixtures;
 use App\Entity\Band;
 use App\Entity\Booking;
 use App\Entity\Festival;
+use App\Entity\User;
 use App\Enum\MusicGenre;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $hasher;
     private array $bandsData = [
         ['name' => 'AC/DC', 'genre' => MusicGenre::Rock],
         ['name' => 'Fantan Mojah', 'genre' => MusicGenre::Reggae],
@@ -31,7 +34,6 @@ class AppFixtures extends Fixture
         ['name' => 'Capella', 'genre' => MusicGenre::Electronic],
         ['name' => 'Scooter', 'genre' => MusicGenre::Electronic],
     ];
-
     private array $festivalsData = [
         [
             'name' => 'Untold 2025',
@@ -58,7 +60,6 @@ class AppFixtures extends Fixture
             'bands' => ['Fragma', 'Jazzbit', 'Capella'],
         ],
     ];
-
     private array $bookingsData = [
         [
             'full_name' => 'Catalin Croitoru',
@@ -86,6 +87,11 @@ class AppFixtures extends Fixture
             'festival' => 'Intencity 2025',
         ],
     ];
+
+    public function __construct(UserPasswordHasherInterface $hasher)
+    {
+        $this->hasher = $hasher;
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -128,6 +134,13 @@ class AppFixtures extends Fixture
             }
             $manager->persist($booking);
         }
+
+        $user = new User();
+        $user->setEmail("admin@admin.com");
+        $user->setPassword($this->hasher->hashPassword($user, "admin@admin.com"));
+        $user->setRoles(["ROLE_ADMIN"]);
+        $user->setUsername("adminUser");
+        $manager->persist($user);
 
         $manager->flush();
     }
