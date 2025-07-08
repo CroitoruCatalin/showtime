@@ -32,12 +32,6 @@ class Festival
     #[Assert\NotBlank]
     private ?\DateTime $end_date = null;
 
-    /**
-     * @var Collection<int, Band>
-     */
-    #[ORM\ManyToMany(targetEntity: Band::class, inversedBy: 'festivals')]
-    private Collection $bands;
-
     #[ORM\Column(length: 255)]
     private ?string $location = null;
 
@@ -50,10 +44,16 @@ class Festival
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'festival')]
     private Collection $bookings;
 
+    /**
+     * @var Collection<int, ScheduleSlot>
+     */
+    #[ORM\OneToMany(targetEntity: ScheduleSlot::class, mappedBy: 'festival')]
+    private Collection $scheduleSlots;
+
     public function __construct()
     {
-        $this->bands = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->scheduleSlots = new ArrayCollection();
     }
 
     public function validateDates(ExecutionContextInterface $context): void
@@ -106,30 +106,6 @@ class Festival
         return $this;
     }
 
-    /**
-     * @return Collection<int, Band>
-     */
-    public function getBand(): Collection
-    {
-        return $this->bands;
-    }
-
-    public function addBand(Band $band): static
-    {
-        if (!$this->bands->contains($band)) {
-            $this->bands->add($band);
-        }
-
-        return $this;
-    }
-
-    public function removeBand(Band $band): static
-    {
-        $this->bands->removeElement($band);
-
-        return $this;
-    }
-
     public function getLocation(): ?string
     {
         return $this->location;
@@ -178,6 +154,36 @@ class Festival
             // set the owning side to null (unless already changed)
             if ($booking->getFestival() === $this) {
                 $booking->setFestival(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ScheduleSlot>
+     */
+    public function getScheduleSlots(): Collection
+    {
+        return $this->scheduleSlots;
+    }
+
+    public function addScheduleSlot(ScheduleSlot $slot): static
+    {
+        if (!$this->scheduleSlots->contains($slot)) {
+            $this->scheduleSlots->add($slot);
+            $slot->setFestival($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScheduleSlot(ScheduleSlot $slot): static
+    {
+        if ($this->scheduleSlots->removeElement($slot)) {
+            // set the owning side to null (unless already changed)
+            if ($slot->getFestival() === $this) {
+                $slot->setFestival(null);
             }
         }
 

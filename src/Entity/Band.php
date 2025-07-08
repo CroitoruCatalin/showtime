@@ -25,14 +25,14 @@ class Band
     private ?MusicGenre $genre = null;
 
     /**
-     * @var Collection<int, Festival>
+     * @var Collection<int, ScheduleSlot>
      */
-    #[ORM\ManyToMany(targetEntity: Festival::class, mappedBy: 'bands')]
-    private Collection $festivals;
+    #[ORM\OneToMany(targetEntity: ScheduleSlot::class, mappedBy: 'band')]
+    private Collection $scheduleSlots;
 
     public function __construct()
     {
-        $this->festivals = new ArrayCollection();
+        $this->scheduleSlots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,27 +64,30 @@ class Band
     }
 
     /**
-     * @return Collection<int, Festival>
+     * @return Collection<int, ScheduleSlot>
      */
-    public function getFestivals(): Collection
+    public function getScheduleSlots(): Collection
     {
-        return $this->festivals;
+        return $this->scheduleSlots;
     }
 
-    public function addFestival(Festival $festival): static
+    public function addScheduleSlot(ScheduleSlot $slot): static
     {
-        if (!$this->festivals->contains($festival)) {
-            $this->festivals->add($festival);
-            $festival->addBand($this);
+        if (!$this->scheduleSlots->contains($slot)) {
+            $this->scheduleSlots->add($slot);
+            $slot->setBand($this);
         }
 
         return $this;
     }
 
-    public function removeFestival(Festival $festival): static
+    public function removeScheduleSlot(ScheduleSlot $slot): static
     {
-        if ($this->festivals->removeElement($festival)) {
-            $festival->removeBand($this);
+        if ($this->scheduleSlots->removeElement($slot)) {
+            // set the owning side to null (unless already changed)
+            if ($slot->getBand() === $this) {
+                $slot->setBand(null);
+            }
         }
 
         return $this;
