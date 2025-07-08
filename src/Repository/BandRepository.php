@@ -30,13 +30,17 @@ class BandRepository extends ServiceEntityRepository
                 ->setParameter('genre', $criteria['genre']);
         }
 
-        $sortCriteria = ['id', 'name', 'genre'];
+        $validSortCriteria = ['id', 'name', 'genre'];
 
-        $sort = isset($criteria['sort']) && in_array($criteria['sort'], $sortCriteria, true) ? $criteria['sort'] : 'id';
+        $sort = isset($criteria['sort']) && in_array($criteria['sort'], $validSortCriteria, true) ? $criteria['sort'] : 'id';
         $dir = (isset($criteria['direction']) && strtoupper($criteria['direction']) == 'DESC') ? 'DESC' : 'ASC';
         $qb->orderBy("b.$sort", $dir);
 
-        $total = (clone $qb)->select('COUNT(b.id)')->getQuery()->getSingleScalarResult();
+        $total = (clone $qb)
+            ->select('COUNT(b.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        
         $qb->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 

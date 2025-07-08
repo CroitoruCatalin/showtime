@@ -21,7 +21,7 @@ final class BandController extends AbstractController
             'name_starts' => (string)$request->get('name_starts', ''),
             'genre' => (string)$request->get('genre', ''),
             'sort' => (string)$request->get('sort', 'id'),
-            'direction' => (string)$request->get('direction', 'asc'),
+            'direction' => (string)$request->get('direction', 'ASC'),
         ];
 
         $page = max(1, (int)$request->get('page', 1));
@@ -29,20 +29,16 @@ final class BandController extends AbstractController
 
         $result = $bandRepository->findFilteredPaginatedSorted($criteria, $page, $limit);
 
-        $bands = $result['items'];
-        $totalItems = $result['total'];
-        $pages = (int)ceil($totalItems / $limit);
-
         return $this->render('band/index.html.twig',
             [
-                'bands' => $bands,
+                'bands' => $result['items'],
                 'letters' => $criteria['name_starts'],
                 'genre' => $criteria['genre'],
                 'sort' => $criteria['sort'],
                 'dir' => $criteria['direction'],
                 'query' => $request->query->all(),
                 'page' => $page,
-                'pages' => $pages,
+                'pages' => ceil($result['total'] / $limit),
             ]);
     }
 
