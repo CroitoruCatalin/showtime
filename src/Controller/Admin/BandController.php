@@ -17,39 +17,29 @@ final class BandController extends AbstractController
     #[Route(name: 'admin_band_index', methods: ['GET'])]
     public function index(Request $request, BandRepository $bandRepository): Response
     {
-        $qb = $bandRepository->createQueryBuilder('b');
-        $letters = $request->query->get('name_starts', '');
-        $genre = $request->query->get('genre', '');
-        $sort = $request->query->get('sort', 'id');
-        $dir = strtoupper($request->query->get('direction', 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
-        $page = max(1, $request->query->get('page', 1));
+        $criteria = [
+            'name_starts' => (string)$request->get('name_starts', ''),
+            'genre' => (string)$request->get('genre', ''),
+            'sort' => (string)$request->get('sort', 'id'),
+            'direction' => (string)$request->get('direction', 'asc'),
+        ];
+
+        $page = max(1, (int)$request->get('page', 1));
         $limit = 5;
-        $offset = ($page - 1) * $limit;
 
-        if ($letters !== '') {
-            $qb->andWhere('b.name LIKE :name_starts')
-                ->setParameter('name_starts', $letters . '%');
-        }
+        $result = $bandRepository->findFilteredPaginatedSorted($criteria, $page, $limit);
 
-        if ($genre !== '') {
-            $qb->andWhere('b.genre = :genre')
-                ->setParameter('genre', $genre);
-        }
-
-        if (in_array($sort, ['id', 'name', 'genre'], true)) {
-            $qb->orderBy("b.$sort", $dir);
-        }
-        $totalItems = (clone $qb)->select('COUNT(b.id)')->getQuery()->getSingleScalarResult();
-        $qb->setFirstResult($offset)->setMaxResults($limit);
-        $bands = $qb->getQuery()->getResult();
+        $bands = $result['items'];
+        $totalItems = $result['total'];
         $pages = (int)ceil($totalItems / $limit);
+
         return $this->render('band/index.html.twig',
             [
                 'bands' => $bands,
-                'letters' => $letters,
-                'genre' => $genre,
-                'sort' => $sort,
-                'dir' => $dir,
+                'letters' => $criteria['name_starts'],
+                'genre' => $criteria['genre'],
+                'sort' => $criteria['sort'],
+                'dir' => $criteria['direction'],
                 'query' => $request->query->all(),
                 'page' => $page,
                 'pages' => $pages,

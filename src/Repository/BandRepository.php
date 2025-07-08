@@ -16,6 +16,36 @@ class BandRepository extends ServiceEntityRepository
         parent::__construct($registry, Band::class);
     }
 
+    public function findFilteredPaginatedSorted(array $criteria, int $page = 1, int $limit = 10): array
+    {
+        $qb = $this->createQueryBuilder('b');
+
+        if (!empty($criteria['name_starts'])) {
+            $qb->andWhere('b.name LIKE :name_starts')
+                ->setParameter('name_starts', $criteria['name_starts'] . '%');
+        }
+
+        if (!empty($criteria['genre'])) {
+            $qb->andWhere('b.genre LIKE :genre')
+                ->setParameter('genre', $criteria['genre']);
+        }
+
+        $sortCriteria = ['id', 'name', 'genre'];
+
+        $sort = isset($criteria['sort']) && in_array($criteria['sort'], $sortCriteria, true) ? $criteria['sort'] : 'id';
+        $dir = (isset($criteria['direction']) && strtoupper($criteria['direction']) == 'DESC') ? 'DESC' : 'ASC';
+        $qb->orderBy("b.$sort", $dir);
+
+        $total = (clone $qb)->select('COUNT(b.id)')->getQuery()->getSingleScalarResult();
+        $qb->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        $items = $qb->getQuery()->getResult();
+        return [
+            'items' => $items,
+            'total' => $total,
+        ];
+    }
 //    /**
 //     * @return Band[] Returns an array of Band objects
 //     */
