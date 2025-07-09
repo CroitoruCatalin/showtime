@@ -21,7 +21,7 @@ class FestivalController extends AbstractController
     #[Route(name: 'admin_festival_index', methods: ['GET'])]
     public function index(FestivalRepository $festivalRepository): Response
     {
-        return $this->render('festival/index.html.twig', [
+        return $this->render('festival/admin-index.html.twig', [
             'festivals' => $festivalRepository->findAll(),
         ]);
     }

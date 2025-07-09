@@ -12,6 +12,30 @@
         </div>
     {% endfor %}
 
+    <div class="relative w-full h-64 mb-2 overflow-hidden rounded-sm shadow-lg">
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
+            alt="Band Cover"
+            class="object-cover w-full h-full"
+        />
+        <div
+            class="absolute top-2 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
+            <span></span>
+            <span class="badge badge-soft badge-info">
+                {{ festival.startDate|date('Y.m.d') }} - {{ festival.endDate|date('Y.m.d') }}
+            </span>
+        </div>
+        <div
+            class="absolute bottom-2 left-4 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
+            <span>
+                {{ festival.name }}
+            </span>
+            <span class="badge badge-soft badge-info">
+                {{ festival.location }}
+            </span>
+        </div>
+    </div>
+
     <div class="mb-4 flex justify-between">
         <a href="{{ path('admin_festival_add_slot', {id: festival.id}) }}" class="btn btn-primary">Add Time Slot</a>
     </div>
