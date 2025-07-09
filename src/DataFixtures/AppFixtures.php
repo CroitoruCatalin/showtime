@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Band;
 use App\Entity\Booking;
 use App\Entity\Festival;
+use App\Entity\ScheduleSlot;
 use App\Entity\User;
 use App\Enum\MusicGenre;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -33,6 +34,7 @@ class AppFixtures extends Fixture
         ['name' => 'Jazzbit', 'genre' => MusicGenre::House],
         ['name' => 'Capella', 'genre' => MusicGenre::Electronic],
         ['name' => 'Scooter', 'genre' => MusicGenre::Electronic],
+        ['name' => 'Guns \'n Roses', 'genre' => MusicGenre::Rock],
     ];
     private array $festivalsData = [
         [
@@ -58,6 +60,33 @@ class AppFixtures extends Fixture
             'location' => 'Brazda',
             'price' => '120.00',
             'bands' => ['Fragma', 'Jazzbit', 'Capella'],
+        ],
+    ];
+
+    private array $scheduleSlotsData = [
+        [
+            'bandName' => 'AC/DC',
+            'festivalName' => 'Untold 2025',
+            'startTime' => '2025-07-15 17:00:00',
+            'endTime' => '2025-07-15 22:00:00',
+        ],
+        [
+            'bandName' => 'Trooper',
+            'festivalName' => 'Untold 2025',
+            'startTime' => '2025-07-15 15:00:00',
+            'endTime' => '2025-07-15 16:45:00',
+        ],
+        [
+            'bandName' => 'Trooper',
+            'festivalName' => 'Untold 2025',
+            'startTime' => '2025-07-16 15:00:00',
+            'endTime' => '2025-07-16 17:00:00',
+        ],
+        [
+            'bandName' => 'Guns \'n Roses',
+            'festivalName' => 'Untold 2025',
+            'startTime' => '2025-07-16 17:00:00',
+            'endTime' => '2025-07-16 22:00:00',
         ],
     ];
     private array $bookingsData = [
@@ -114,15 +143,35 @@ class AppFixtures extends Fixture
                 ->setLocation($data['location'])
                 ->setPrice($data['price']);
 
-            foreach ($data['bands'] as $bandName) {
-                if (isset($bandEntities[$bandName])) {
-                    $festival->addBand($bandEntities[$bandName]);
-                }
-            }
-
             $manager->persist($festival);
             $festivalEntities[$data['name']] = $festival;
         }
+
+        foreach ($this->scheduleSlotsData as $slotData) {
+            $festival = $festivalEntities[$slotData['festivalName']] ?? null;
+            $band = $bandEntities[$slotData['bandName']] ?? null;
+
+            if (!$band || !$festival) {
+                continue;
+            }
+
+            /** @var \DateTime $startTime */
+            $startTime = new \DateTime($slotData['startTime']);
+            /** @var \DateTime $endTime */
+            $endTime = new \DateTime($slotData['endTime']);
+
+            $slot = (new ScheduleSlot())
+                ->setStartTime($startTime)
+                ->setEndTime($endTime)
+                ->setBand($band)
+                ->setFestival($festival);
+
+            $festival->addScheduleSlot($slot);
+            $band->addScheduleSlot($slot);
+
+            $manager->persist($slot);
+        }
+
 
         foreach ($this->bookingsData as $data) {
             $booking = new Booking();
