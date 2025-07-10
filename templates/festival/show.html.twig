@@ -14,7 +14,7 @@
 
     <div class="relative w-full h-64 mb-2 overflow-hidden rounded-sm shadow-lg">
         <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
+            src="{{ asset(festival.image ? 'images/'~festival.image.filename : 'images/default.jpg') }}"
             alt="Band Cover"
             class="object-cover w-full h-full"
         />

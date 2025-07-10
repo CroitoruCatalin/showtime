@@ -68,6 +68,7 @@
             </tr>
             </thead>
             <tbody>
+            {% set imagePath = 'images/' %}
             {% for band in bands %}
                 <tr>
                     <td>{{ band.id }}</td>
@@ -75,7 +76,9 @@
                         <div class="flex items-center gap-3">
                             <div class="avatar">
                                 <div class="mask mask-squircle h-12 w-12">
-                                    <img src="https://img.daisyui.com/images/profile/demo/2@94.webp" alt="Avatar"/>
+                                    <img
+                                        src="{{ asset(band.image ? 'images/'~band.image.filename : 'images/default.jpg') }}"
+                                        alt="Avatar"/>
                                 </div>
                             </div>
                             <div>
