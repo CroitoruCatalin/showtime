@@ -50,6 +50,10 @@ class Festival
     #[ORM\OneToMany(targetEntity: ScheduleSlot::class, mappedBy: 'festival')]
     private Collection $scheduleSlots;
 
+    #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Image $image = null;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
@@ -186,6 +190,18 @@ class Festival
                 $slot->setFestival(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

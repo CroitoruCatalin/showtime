@@ -47,6 +47,15 @@
     }) }}
     {{ form_errors(form.price) }}
 
+    {# image #}
+    <label class="label" for="{{ form.image.vars.id }}">
+        {{ form_label(form.image, 'Image') }}
+    </label>
+    {{ form_widget(form.image, {
+        attr: {class: 'file-input'}
+    }) }}
+    {{ form_errors(form.image) }}
+
 
     <button type="submit" class="btn btn-primary mt-4 w-full">
         {{ button_label|default('Save') }}

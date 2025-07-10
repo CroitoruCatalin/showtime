@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BandRepository::class)]
-class Band
+class   Band
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,6 +29,10 @@ class Band
      */
     #[ORM\OneToMany(targetEntity: ScheduleSlot::class, mappedBy: 'band')]
     private Collection $scheduleSlots;
+
+    #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Image $image = null;
 
     public function __construct()
     {
@@ -89,6 +93,18 @@ class Band
                 $slot->setBand(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

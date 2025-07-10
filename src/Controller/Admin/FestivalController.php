@@ -8,9 +8,11 @@ use App\Form\FestivalType;
 use App\Form\ScheduleSlotType;
 use App\Repository\FestivalRepository;
 use App\Repository\ScheduleSlotRepository;
+use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -119,13 +121,22 @@ class FestivalController extends AbstractController
     }
 
     #[Route('/new', name: 'admin_festival_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        ImageService           $imageService,
+    ): Response
     {
         $festival = new Festival();
         $form = $this->createForm(FestivalType::class, $festival);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $image */
+            $image = $form->get('image')->getData();
+            if ($image) {
+                $festival->setImage($imageService->upload($image));
+            }
             $entityManager->persist($festival);
             $entityManager->flush();
 
@@ -155,14 +166,29 @@ class FestivalController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'admin_festival_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Festival $festival, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request                $request,
+        Festival               $festival,
+        EntityManagerInterface $entityManager,
+        ImageService           $imageService,
+    ): Response
     {
+        $originalImage = $festival->getImage();
         $form = $this->createForm(FestivalType::class, $festival);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $image */
+            $image = $form->get('image')->getData();
+            if ($image) {
+                if ($originalImage) {
+                    $festival->setImage(null);
+                    $entityManager->flush();
+                    $imageService->remove($originalImage);
+                }
+                $festival->setImage($imageService->upload($image));
+            }
             $entityManager->flush();
-
             return $this->redirectToRoute('admin_festival_index', [], Response::HTTP_SEE_OTHER);
         }
 

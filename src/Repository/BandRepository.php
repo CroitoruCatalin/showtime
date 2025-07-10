@@ -40,11 +40,12 @@ class BandRepository extends ServiceEntityRepository
             ->select('COUNT(b.id)')
             ->getQuery()
             ->getSingleScalarResult();
-        
+
         $qb->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 
-        $items = $qb->getQuery()->getResult();
+        $items = $qb->getQuery()
+            ->getResult();
         return [
             'items' => $items,
             'total' => $total,

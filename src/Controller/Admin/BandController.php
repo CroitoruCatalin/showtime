@@ -5,8 +5,10 @@ namespace App\Controller\Admin;
 use App\Entity\Band;
 use App\Form\BandType;
 use App\Repository\BandRepository;
+use App\Service\ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,7 +27,7 @@ final class BandController extends AbstractController
         ];
 
         $page = max(1, (int)$request->get('page', 1));
-        $limit = 5;
+        $limit = 100;
 
         $result = $bandRepository->findFilteredPaginatedSorted($criteria, $page, $limit);
 
@@ -43,13 +45,24 @@ final class BandController extends AbstractController
     }
 
     #[Route('/new', name: 'admin_band_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        ImageService           $imageService
+    ): Response
     {
         $band = new Band();
         $form = $this->createForm(BandType::class, $band);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $imageFile */
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $image = $imageService->upload($imageFile);
+                $band->setImage($image);
+            }
+
             $entityManager->persist($band);
             $entityManager->flush();
 
@@ -71,12 +84,26 @@ final class BandController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'admin_band_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Band $band, EntityManagerInterface $entityManager): Response
+    public function edit(
+        Request                $request,
+        Band                   $band,
+        EntityManagerInterface $entityManager,
+        ImageService           $imageService,
+    ): Response
     {
         $form = $this->createForm(BandType::class, $band);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $imageFile */
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                if ($band->getImage() !== null) {
+                    $imageService->remove($band->getImage());
+                }
+                $band->setImage($imageService->upload($imageFile));
+                $entityManager->flush();
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('admin_band_index', [], Response::HTTP_SEE_OTHER);
@@ -89,13 +116,18 @@ final class BandController extends AbstractController
     }
 
     #[Route('/{id}', name: 'admin_band_delete', methods: ['POST'])]
-    public function delete(Request $request, Band $band, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request                $request,
+        Band                   $band,
+        EntityManagerInterface $entityManager,
+        ImageService           $imageService
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete' . $band->getId(), $request->request->get('_token'))) {
             $entityManager->remove($band);
+            $imageService->remove($band->getImage());
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('admin_band_index', [], Response::HTTP_SEE_OTHER);
     }
 }
