@@ -200,9 +200,17 @@ class FestivalController extends AbstractController
 
 
     #[Route('/{id}', name: 'admin_festival_delete', methods: ['POST'])]
-    public function delete(Request $request, Festival $festival, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request                $request,
+        Festival               $festival,
+        EntityManagerInterface $entityManager,
+        ImageService           $imageService
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete' . $festival->getId(), $request->request->get('_token'))) {
+            if ($festival->getImage() !== null) {
+                $imageService->remove($festival->getImage());
+            }
             $entityManager->remove($festival);
             $entityManager->flush();
         }

@@ -27,7 +27,12 @@ class   Band
     /**
      * @var Collection<int, ScheduleSlot>
      */
-    #[ORM\OneToMany(targetEntity: ScheduleSlot::class, mappedBy: 'band')]
+    #[ORM\OneToMany(
+        targetEntity: ScheduleSlot::class,
+        mappedBy: 'band',
+        orphanRemoval: true,
+        cascade: ['remove']
+    )]
     private Collection $scheduleSlots;
 
     #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist'])]

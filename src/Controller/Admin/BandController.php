@@ -124,8 +124,10 @@ final class BandController extends AbstractController
     ): Response
     {
         if ($this->isCsrfTokenValid('delete' . $band->getId(), $request->request->get('_token'))) {
+            if ($band->getImage() !== null) {
+                $imageService->remove($band->getImage());
+            }
             $entityManager->remove($band);
-            $imageService->remove($band->getImage());
             $entityManager->flush();
         }
         return $this->redirectToRoute('admin_band_index', [], Response::HTTP_SEE_OTHER);

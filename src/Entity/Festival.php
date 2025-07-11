@@ -41,13 +41,23 @@ class Festival
     /**
      * @var Collection<int, Booking>
      */
-    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'festival')]
+    #[ORM\OneToMany(
+        targetEntity: Booking::class,
+        mappedBy: 'festival',
+        orphanRemoval: true,
+        cascade: ['remove'],
+    )]
     private Collection $bookings;
 
     /**
      * @var Collection<int, ScheduleSlot>
      */
-    #[ORM\OneToMany(targetEntity: ScheduleSlot::class, mappedBy: 'festival')]
+    #[ORM\OneToMany(
+        targetEntity: ScheduleSlot::class,
+        mappedBy: 'festival',
+        orphanRemoval: true,
+        cascade: ['remove']
+    )]
     private Collection $scheduleSlots;
 
     #[ORM\ManyToOne(targetEntity: Image::class, cascade: ['persist'])]
