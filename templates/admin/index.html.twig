@@ -5,38 +5,47 @@
 {% block content %}
     <div class="stats stats-vertical lg:stats-horizontal shadow mb-10">
         <div class="stat">
-            <div class="stat-title">Downloads</div>
-            <div class="stat-value">31K</div>
+            <div class="stat-title">Bookings</div>
+            <div class="stat-value">{{ bookings|length }}</div>
             <div class="stat-desc">Jan 1st - Feb 1st</div>
         </div>
 
         <div class="stat">
-            <div class="stat-title">New Users</div>
-            <div class="stat-value">4,200</div>
-            <div class="stat-desc">↗︎ 400 (22%)</div>
+            <div class="stat-title">Festivals</div>
+            <div class="stat-value">{{ festivals|length }}</div>
+            <div class="stat-desc">↗︎Total number of festivals</div>
         </div>
 
         <div class="stat">
-            <div class="stat-title">New Registers</div>
-            <div class="stat-value">1,200</div>
+            <div class="stat-title">Bands</div>
+            <div class="stat-value">{{ bands|length }}</div>
             <div class="stat-desc">↘︎ 90 (14%)</div>
+        </div>
+        <div class="stat">
+            <div class="stat-title">Schedule slots</div>
+            <div class="stat-value">{{ slots|length }}</div>
+            <div class="stat-desc">↘︎ 90 (14%)</div>
+        </div>
+        <div class="stat">
+            <div class="stat-title">Expected earnings</div>
+            <div class="stat-value">{{ earnings }}$</div>
+            <div class="stat-desc">Total value of bookings</div>
         </div>
     </div>
 
 
     <div class="grid grid-cols-1 gap-2 md:grid-cols-2 2xl:grid-cols-4 justify-items-center">
         <div class="">
-            <div class="card bg-base-100 w-90 shadow-sm">
-                <figure class="px-10 pt-10">
+            <div class="card bg-base-100 h-70 w-60 lg:w-70  shadow-sm">
+                <figure>
                     <img
                         src="{{ asset('images/festival.jpg') }}"
                         alt="Festival"
-                        class="rounded-xl h-[160px] w-[260px] object-fill"
+                        class="rounded-xl object-fill"
                     />
                 </figure>
-                <div class="card-body items-center text-center">
+                <div class="card-body">
                     <h2 class="card-title">Festivals</h2>
-                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                     <div class="card-actions">
                         <button class="btn btn-primary">
                             <a href="{{ path('admin_festival_index') }}" class="btn btn-primary">Manage festivals</a>
@@ -46,16 +55,15 @@
             </div>
         </div>
         <div class="">
-            <div class="card bg-base-100 w-90 shadow-sm">
-                <figure class="px-10 pt-10">
+            <div class="card bg-base-100 h-70 w-60 lg:w-70 shadow-sm">
+                <figure>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
                         alt="Band"
-                        class="rounded-xl h-[160px] w-[260px] object-fill"/>
+                        class="rounded-xl object-fill"/>
                 </figure>
-                <div class="card-body items-center text-center">
+                <div class="card-body">
                     <h2 class="card-title">Bands</h2>
-                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                     <div class="card-actions">
                         <a href="{{ path('admin_band_index') }}" class="btn btn-primary">Manage bands</a>
                     </div>
@@ -63,33 +71,31 @@
             </div>
         </div>
         <div class="">
-            <div class="card bg-base-100 w-90 shadow-sm">
-                <figure class="px-10 pt-10">
+            <div class="card bg-base-100 h-70 w-60 lg:w-70  shadow-sm">
+                <figure>
                     <img
-                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        src="{{ asset('images/booking.jpg') }}"
                         alt="Shoes"
-                        class="rounded-xl h-[160px] w-[260px] object-fill"/>
+                        class="rounded-xl object-fill"/>
                 </figure>
-                <div class="card-body items-center text-center">
-                    <h2 class="card-title">Card Title</h2>
-                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                <div class="card-body">
+                    <h2 class="card-title">Bookings</h2>
                     <div class="card-actions">
-                        <button class="btn btn-primary">Manage whatever 1</button>
+                        <a href="{{ path('booking_index') }}" class="btn btn-primary">Manage bookings</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="">
-            <div class="card bg-base-100 w-90 shadow-sm">
-                <figure class="px-10 pt-10">
+            <div class="card bg-base-100 h-70 w-60 lg:w-70  shadow-sm">
+                <figure class="">
                     <img
                         src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
                         alt="Shoes"
-                        class="rounded-xl h-[160px] w-[260px] object-fill"/>
+                        class="rounded-xl object-fill"/>
                 </figure>
-                <div class="card-body items-center text-center">
+                <div class="card-body">
                     <h2 class="card-title">Card Title</h2>
-                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                     <div class="card-actions">
                         <button class="btn btn-primary">Manage wathever 2</button>
                     </div>

@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html.twig' %}
+{% extends 'layouts/admin-base.html.twig' %}
 
 {% block title %}Festival: {{ festival.name }}{% endblock %}
 {% block content %}
@@ -11,7 +11,6 @@
             <span>{{ message }}</span>
         </div>
     {% endfor %}
-
 
     <div class="relative w-full h-64 mb-2 overflow-hidden rounded-sm shadow-lg">
         <img
@@ -37,16 +36,18 @@
         </div>
     </div>
 
-
-    <div class="flex justify-between items-center">
-        <a href="{{ path('user_festival_book', {'id' : festival.id}) }}" class="btn btn-primary">Book ticket</a>
+    <div class="mb-4 flex justify-between">
+        <a href="{{ path('admin_festival_add_slot', {id: festival.id}) }}" class="btn btn-primary">Add Time Slot</a>
     </div>
+
+    <h2 class="text-xl mb-2">Schedule</h2>
     <table class="table table-auto w-full mb-6">
         <thead>
         <tr>
             <th>Band</th>
             <th>Start Time</th>
             <th>End Time</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -62,7 +63,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ path('user_band_show', { id: slot.band.id }) }}"
+                            <a href="{{ path('admin_band_show', { id: slot.band.id }) }}"
                                class="">
                                 {{ slot.band.name }}
                             </a>
@@ -71,6 +72,13 @@
                 </td>
                 <td>{{ slot.startTime|date('m-d H:i') }}</td>
                 <td>{{ slot.endTime|date('m-d H:i') }}</td>
+                <td>
+                    <form action="{{ path('admin_festival_delete_slot', {id: festival.id, slotId: slot.id}) }}"
+                          method="post" class="inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete-slot' ~ slot.id) }}">
+                        <button type="submit" class="btn btn-soft btn-warning">Remove</button>
+                    </form>
+                </td>
             </tr>
         {% else %}
             <tr>
@@ -79,4 +87,7 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <a href="{{ path('admin_festival_index') }}" class="btn btn-link">Back to list</a>
+    <a href="{{ path('admin_festival_edit', {id: festival.id}) }}" class="btn btn-link">Edit Festival</a>
 {% endblock %}

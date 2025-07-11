@@ -7,7 +7,7 @@
         <table class="table">
             <thead>
             <tr>
-                <th colspan="6"><h1 class="text-xl">Festivals</h1></th>
+                <th colspan="6"><h1 class="text-xl">Festivals ({{ festivals|length }})</h1></th>
                 <th><a href="{{ path('admin_festival_new') }}" class="btn btn-primary">Create new</a></th>
             </tr>
             <tr>
@@ -34,7 +34,11 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="font-bold"> {{ festival.name }}</div>
+                                <div class="font-bold">
+                                    <a href="{{ path('admin_festival_show', {'id': festival.id}) }}">
+                                        {{ festival.name }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </td>

@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}{{ band.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="relative w-full h-64 overflow-hidden rounded-sm shadow-lg mb-5">
+        <img
+            src="{{ asset(band.image ? 'images/'~band.image.filename : 'images/default.jpg') }}"
+            alt="Band Cover"
+            class="object-cover w-full h-full"
+        />
+        <div
+            class="absolute bottom-2 left-4 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
+            <span>
+                {{ band.name }}
+            </span>
+            <span class="badge badge-soft badge-info">
+                {{ band.genre.value }}
+            </span>
+        </div>
+    </div>
+{% endblock %}

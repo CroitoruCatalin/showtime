@@ -3,24 +3,18 @@
 {% block title %}Booking{% endblock %}
 
 {% block content %}
-
-    <div class="relative w-full h-64 overflow-hidden rounded-sm shadow-lg">
-        <img
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a5/DOOM_live_%285875994059%29.jpg"
-            alt="Band Cover"
-            class="object-cover w-full h-full"
-        />
-        <div
-            class="absolute bottom-2 left-4 right-4 bg-black/20 text-white px-4 py-2 text-xl rounded-sm font-bold flex justify-between items-center">
-            <span>
-                {{ booking.fullName }}
-            </span>
-            <span class="badge badge-soft badge-info">
-                {{ booking.email }}
-            </span>
+    {% for message in app.flashes('success') %}
+        <div role="alert" class="alert alert-success mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>{{ message }}</span>
         </div>
-    </div>
-
+    {% endfor %}
+    <header class="bg-base-100 mb-3">
+        <h1 class="text-xl font-bold">Booking details</h1>
+    </header>
     <table class="table">
         <tbody>
         <tr>
@@ -33,16 +27,19 @@
         </tr>
         <tr>
             <th>Festival</th>
-            <td>{{ booking.festival.name }}</td>
+            <td>
+                <a href="{{ path('user_festival_show', {'id': booking.festival.id}) }}">
+                    <div class="avatar">
+                        <div class="mask mask-squircle h-12 w-12">
+                            <img
+                                src="{{ asset(booking.festival.image ? 'images/'~booking.festival.image.filename : 'images/default.jpg') }}"
+                                alt="Avatar Tailwind CSS Component"/>
+                        </div>
+                    </div>
+                    {{ booking.festival.name }}
+                </a>
+            </td>
         </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('booking_index') }}">back to list</a>
-
-    <a href="{{ path('booking_edit', {'id': booking.id}) }}">edit</a>
-
-    <div class="w-[100px]">
-        {{ include('booking/_delete_form.html.twig') }}
-    </div>
 {% endblock %}

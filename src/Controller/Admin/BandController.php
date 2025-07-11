@@ -27,7 +27,7 @@ final class BandController extends AbstractController
         ];
 
         $page = max(1, (int)$request->get('page', 1));
-        $limit = 100;
+        $limit = 5;
 
         $result = $bandRepository->findFilteredPaginatedSorted($criteria, $page, $limit);
 
@@ -78,7 +78,7 @@ final class BandController extends AbstractController
     #[Route('/{id}', name: 'admin_band_show', methods: ['GET'])]
     public function show(Band $band): Response
     {
-        return $this->render('band/show.html.twig', [
+        return $this->render('band/admin-show.html.twig', [
             'band' => $band,
         ]);
     }

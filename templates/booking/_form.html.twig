@@ -21,17 +21,17 @@
     {{ form_errors(form.email) }}
 
     {# Festival field #}
-    <label class="label" for="{{ form.festival.vars.id }}">
-        {{ form_label(form.festival, 'Festival') }}
-    </label>
-    {{ form_widget(form.festival, {
-        attr: { class: 'select select-bordered w-full' }
-    }) }}
-    {{ form_errors(form.festival) }}
+    {#    <label class="label" for="{{ form.festival.vars.id }}"> #}
+    {#        {{ form_label(form.festival, 'Festival') }} #}
+    {#    </label> #}
+    {#    {{ form_widget(form.festival, { #}
+    {#        attr: { class: 'select select-bordered w-full' } #}
+    {#    }) }} #}
+    {#    {{ form_errors(form.festival) }} #}
 
 
     <button type="submit" class="btn btn-primary mt-4 w-full">
-        {{ button_label|default('Save') }}
+        Create Booking
     </button>
     {{ form_end(form) }}
     {% if booking is defined and booking.id %}

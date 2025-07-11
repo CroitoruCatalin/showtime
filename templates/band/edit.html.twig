@@ -3,13 +3,9 @@
 {% block title %}Edit Band{% endblock %}
 
 {% block content %}
-    <h1>Edit Band</h1>
-
     {{ include('band/_form.html.twig', {
         'button_label': 'Update',
         'band': band,
         'form_title': 'Edit band'
     }) }}
-
-    <a href="{{ path('admin_band_index') }}">back to list</a>
 {% endblock %}

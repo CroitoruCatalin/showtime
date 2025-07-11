@@ -159,7 +159,7 @@ class FestivalController extends AbstractController
             ['festival' => $festival],
             ['startTime' => 'ASC']
         );
-        return $this->render('festival/show.html.twig', [
+        return $this->render('festival/admin-show.html.twig', [
             'festival' => $festival,
             'slots' => $slots,
         ]);
@@ -217,4 +217,5 @@ class FestivalController extends AbstractController
 
         return $this->redirectToRoute('admin_festival_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

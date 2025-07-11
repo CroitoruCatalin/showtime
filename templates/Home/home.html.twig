@@ -2,4 +2,30 @@
 
 {% block title %}Landing page{% endblock %}
 {% block content %}
+    <div class="justify-items-center">
+        {% for festival in festivals %}
+            <div
+                class="card sm:w-100 md:w-150 lg:w-180 xl:w-260 h-100 md:h-150 shadow-sm mb-5 bg-primary text-primary-content">
+                <figure>
+                    <img
+                        src="{{ asset(festival.image ? 'images/'~festival.image.filename : 'images/default.jpg') }}"
+                        alt="Shoes"/>
+                </figure>
+                <div class="card-body">
+                    <h2 class="card-title text-xl">{{ festival.name }}
+                        <span class="badge badge-soft badge-info">
+                            {{ festival.startDate|date('Y.m.d') }} - {{ festival.endDate|date('Y.m.d') }}
+                        </span>
+                    </h2>
+                    <p class="text-lg">Location: <span
+                            class="badge badge-soft badge-info">{{ festival.location }}</span></p>
+                    <div class="card-actions justify-end">
+                        <a href='{{ path('user_festival_show', {id: festival.id}) }}' class="btn">
+                            Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

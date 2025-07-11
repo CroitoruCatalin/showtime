@@ -24,7 +24,6 @@ class AppFixtures extends Fixture
         ['name' => 'Scorpions', 'genre' => MusicGenre::Rock],
         ['name' => 'Art of Trance', 'genre' => MusicGenre::Trance],
         ['name' => 'Trooper', 'genre' => MusicGenre::Metal],
-        ['name' => 'Fantan Mojah', 'genre' => MusicGenre::Reggae],
         ['name' => 'Iris', 'genre' => MusicGenre::Rock],
         ['name' => 'Pheonix', 'genre' => MusicGenre::Rock],
         ['name' => 'Byron', 'genre' => MusicGenre::Rock],

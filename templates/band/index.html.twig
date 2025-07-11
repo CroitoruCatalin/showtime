@@ -38,7 +38,7 @@
             <thead>
             <tr class="sticky top-0">
                 <th colspan="3">
-                    <h1 class="text-xl">Bands</h1>
+                    <h1 class="text-xl">Bands ({{ bands|length }})</h1>
                 </th>
                 <th>
                     <a href="{{ path('admin_band_new') }}" class="btn btn-primary">Create new</a>
@@ -82,7 +82,11 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="font-bold text-sm">{{ band.name }}</div>
+                                <div class="font-bold text-sm">
+                                    <a href="{{ path('admin_band_show', { 'id': band.id }) }}">
+                                        {{ band.name }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </td>

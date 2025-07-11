@@ -3,12 +3,8 @@
 {% block title %}New Band{% endblock %}
 
 {% block content %}
-    <h1>Create new Band</h1>
-
     {{ include('band/_form.html.twig', {
         'button_label' : 'Create',
         'form_title': 'Add a band'
     }) }}
-
-    <a href="{{ path('admin_band_index') }}">back to list</a>
 {% endblock %}

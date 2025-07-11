@@ -2,14 +2,12 @@
 
 {% block title %}Add Time Slot to {{ festival.name }}{% endblock %}
 {% block content %}
-    <h1>Add Time Slot to {{ festival.name }}</h1>
-
-    <fieldset class="fieldset p-4">
+    <fieldset class="fieldset bg-base-200 border border-base-300 rounded-box p-4 max-w-md mx-auto space-y-4">
         <legend class="fieldset-legend">New Time Slot for {{ festival.name }}</legend>
         {{ form_start(form, { attr: { class: 'space-y-4 w-full max-w-md' } }) }}
-        {{ form_row(form.band) }}
-        {{ form_row(form.startTime) }}
-        {{ form_row(form.endTime) }}
+        {{ form_row(form.band, {attr: {class: 'select select-bordered w-full'}}) }}
+        {{ form_widget(form.startTime, { attr: { class: 'input input-bordered w-full' } }) }}
+        {{ form_widget(form.endTime, { attr: { class: 'input input-bordered w-full' } }) }}
         <button class="btn btn-primary" type="submit">Add Slot</button>
         {{ form_errors(form) }}
         {{ form_end(form) }}
