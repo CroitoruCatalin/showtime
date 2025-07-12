@@ -123,40 +123,90 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $bandEntities = [];
-        $festivalEntities = [];
-        foreach ($this->bandsData as $data) {
-            $band = new Band();
-            $band->setName($data['name']);
-            $band->setGenre($data['genre']);
-            $manager->persist($band);
-            $bandEntities[$data['name']] = $band;
-        }
+        $bandEntities = $this->createBands($this->bandsData, $manager);
+        $festivalEntities = $this->createFestivals($this->festivalsData, $manager);
+        $scheduleSlotEntities = $this->createSlots(
+            $this->scheduleSlotsData,
+            $festivalEntities,
+            $bandEntities,
+            $manager);
 
-        foreach ($this->festivalsData as $data) {
-            $festival = new Festival();
-            $festival
+        $bookingEntities = $this->createBookings($this->bookingsData, $festivalEntities, $manager);
+
+        $user = $this->createUser(
+            'admin@admin.com',
+            'admin@admin.com',
+            ['ROLE_ADMIN'],
+            'adminUser',
+            $manager
+        );
+        $manager->flush();
+    }
+
+    private function createBands(
+        array         $bandsData,
+        ObjectManager $manager,
+        bool          $flush = false
+    ): array
+    {
+        $entities = [];
+        foreach ($bandsData as $data) {
+            $band = (new Band())
+                ->setName($data['name'])
+                ->setGenre($data['genre']);
+            $manager->persist($band);
+            $entities[$data['name']] = $band;
+        }
+        if ($flush) {
+            $manager->flush();
+        }
+        return $entities;
+    }
+    
+    private function createFestivals(
+        array         $festivalsData,
+        ObjectManager $manager,
+        bool          $flush = false
+    ): array
+    {
+        $entities = [];
+        foreach ($festivalsData as $data) {
+            $festival = (new Festival())
                 ->setName($data['name'])
                 ->setStartDate(new \DateTime($data['start_date']))
                 ->setEndDate(new \DateTime($data['end_date']))
                 ->setLocation($data['location'])
                 ->setPrice($data['price']);
-
             $manager->persist($festival);
-            $festivalEntities[$data['name']] = $festival;
+            $entities[$data['name']] = $festival;
         }
+        if ($flush) {
+            $manager->flush();
+        }
+        return $entities;
+    }
 
-        foreach ($this->scheduleSlotsData as $slotData) {
-            $festival = $festivalEntities[$slotData['festivalName']] ?? null;
-            $band = $bandEntities[$slotData['bandName']] ?? null;
+    private function createSlots(
+        array         $slotEntitiesData,
+        array         $festivalEntities,
+        array         $bandEntities,
+        ObjectManager $manager,
+        bool          $flush = false
+    ): array
+    {
+        $scheduleSlots = [];
 
-            if (!$band || !$festival) {
-                continue;
+        foreach ($slotEntitiesData as $slotData) {
+            $festName = $slotData['festivalName'];
+            $bandName = $slotData['bandName'];
+            $festival = $festivalEntities[$festName] ?? null;
+            $band = $bandEntities[$bandName] ?? null;
+
+            if (!isset($bandEntities[$bandName]) || !isset($festivalEntities[$festName])) {
+                throw new \InvalidArgumentException("Invalid slot: band or festival not found");
             }
 
-            /** @var \DateTime $startTime */
             $startTime = new \DateTime($slotData['startTime']);
-            /** @var \DateTime $endTime */
             $endTime = new \DateTime($slotData['endTime']);
 
             $slot = (new ScheduleSlot())
@@ -167,12 +217,25 @@ class AppFixtures extends Fixture
 
             $festival->addScheduleSlot($slot);
             $band->addScheduleSlot($slot);
-
             $manager->persist($slot);
+            $scheduleSlots[] = $slot;
         }
+        if ($flush) {
+            $manager->flush();
+        }
+        return $scheduleSlots;
+    }
 
 
-        foreach ($this->bookingsData as $data) {
+    private function createBookings(
+        array         $bookingsData,
+        array         $festivalEntities,
+        ObjectManager $manager,
+        bool          $flush = false
+    ): array
+    {
+        $bookings = [];
+        foreach ($bookingsData as $data) {
             $booking = new Booking();
             $booking
                 ->setFullName($data['full_name'])
@@ -181,15 +244,33 @@ class AppFixtures extends Fixture
                 $booking->setFestival($festivalEntities[$data['festival']]);
             }
             $manager->persist($booking);
+            $bookings[] = $booking;
         }
+        if ($flush) {
+            $manager->flush();
+        }
+        return $bookings;
+    }
 
-        $user = new User();
-        $user->setEmail("admin@admin.com");
-        $user->setPassword($this->hasher->hashPassword($user, "admin@admin.com"));
-        $user->setRoles(["ROLE_ADMIN"]);
-        $user->setUsername("adminUser");
+
+    private function createUser(
+        string        $email,
+        string        $password,
+        array         $roles,
+        string        $username,
+        ObjectManager $manager,
+        bool          $flush = false
+    ): User
+    {
+        $user = (new User())
+            ->setEmail($email)
+            ->setUsername($username)
+            ->setRoles($roles);
+        $user->setPassword($this->hasher->hashPassword($user, $password));
         $manager->persist($user);
-
-        $manager->flush();
+        if ($flush) {
+            $manager->flush();
+        }
+        return $user;
     }
 }
